@@ -1,7 +1,8 @@
 <template>
   <div>
     <el-form
-      inline
+      :inline="formInfo.inline"
+      :label-width="formInfo.labelWidth || '60px'"
       label-suffix=":"
       v-if="formInfo.data"
       ref="formRef"
@@ -9,7 +10,13 @@
       :model="dataForm"
     >
       <template v-for="(item, i) in formInfo.data">
-        <ForItem :key="i" :item="item" v-model="dataForm[item.prop]" />
+        <ForItem
+          :key="i"
+          :item="item"
+          :class="{ blockable: !formInfo.inline }"
+          v-model="dataForm[item.prop]"
+          @fileList="setFileList"
+        />
       </template>
     </el-form>
   </div>
@@ -30,13 +37,21 @@ export default {
   },
   data() {
     return {
-      dataForm: {}
+      dataForm: {},
+      fileList: []
     }
   },
   methods: {
     // 重置
     resetFields() {
       this.$refs.formRef.resetFields()
+    },
+    // setFileList
+    setFileList(fileList) {
+      this.fileList = fileList
+    },
+    getFileList() {
+      return this.fileList
     }
   },
   watch: {
@@ -50,4 +65,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.blockable {
+  margin: 5px 0;
+  ::v-deep .w100 {
+    width: 100%;
+  }
+}
+</style>
