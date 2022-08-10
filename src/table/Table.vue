@@ -1,30 +1,53 @@
 <template>
   <div>
-    <el-table :data="tableData" @selection-change="tableSelection">
+    <el-table
+      :data="tableData"
+      @selection-change="tableSelection"
+      border
+      style="width: 100%"
+      :height="tableHeight || '300px'"
+    >
       <template v-for="(item, i) in tableColData">
         <el-table-column
-          v-if="item.type === 'selection'"
+          v-if="['selection', 'index'].includes(item.type)"
           :key="i"
           :align="item.align || 'left'"
-          type="selection"
-          :width="item.width"
+          :label="item.label"
+          :type="item.type"
+          :width="item.width || '80px'"
         ></el-table-column>
         <el-table-column
           v-else-if="item.type === 'config'"
           :key="i"
           :align="item.align || 'left'"
           :label="item.label"
-          :width="item.width"
+          :prop="item.prop"
+          :width="item.width || '80px'"
+          :fixed="item.fixed"
         >
           <template #default="{ row }">
-            <el-button
-              v-for="(btn, index) in item.buttons"
-              :key="index"
-              :type="btn.type"
-              :size="btn.size"
-              @click="configBtnClick(btn.action, row)"
-              >{{ btn.label }}</el-button
-            >
+            <template v-if="row.permissionList">
+              <el-button
+                class="btn"
+                v-for="(btn, index) in row.permissionList"
+                :key="index"
+                :type="btn.type"
+                :size="btn.size"
+                @click="configBtnClick(btn.action, row)"
+                >{{ btn.label }}</el-button
+              >
+            </template>
+            <template v-else>
+              <el-button
+                class="btn"
+                v-for="(btn, index) in item.buttons"
+                :key="index"
+                :type="btn.type"
+                :size="btn.size"
+                @click="configBtnClick(btn.action, row)"
+                >{{ btn.label }}</el-button
+              >
+            </template>
           </template>
         </el-table-column>
         <el-table-column
@@ -35,10 +58,12 @@
           :prop="item.prop"
           :width="item.width"
           :formatter="item.formatter"
+          :fixed="item.fixed"
         >
         </el-table-column>
       </template>
     </el-table>
+    <!-- <div v-else>暂无数据！！！</div> -->
   </div>
 </template>
 
@@ -53,7 +78,14 @@ export default {
     tableData: {
       type: Array,
       default: () => []
+    },
+    tableHeight: {
+      type: String,
+      default: () => '300px'
     }
+  },
+  create() {
+    console.log(this.tableHeight)
   },
   data() {
     return {}
@@ -69,4 +101,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.btn {
+  margin: 0 6px 0 0;
+}
+</style>

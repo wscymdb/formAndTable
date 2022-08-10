@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-form
-      :inline="formInfo.inline"
-      :label-width="formInfo.labelWidth || '60px'"
-      label-suffix=":"
+      :label-width="formInfo.labelWidth"
+      :label-suffix="formInfo.labelSuffix"
       v-if="formInfo.data"
       ref="formRef"
+      :class="{ flexable: formInfo.inline }"
       :rules="formInfo.rules"
       :model="dataForm"
     >
@@ -13,9 +13,9 @@
         <ForItem
           :key="i"
           :item="item"
-          :class="{ blockable: !formInfo.inline }"
+          :class="{ blockable: formInfo.inline }"
           v-model="dataForm[item.prop]"
-          @fileList="setFileList"
+          ref="formItemRef"
         />
       </template>
     </el-form>
@@ -30,15 +30,32 @@ export default {
     formInfo: {
       type: Object,
       default: () => {}
+    },
+    dataInfo: {
+      type: Object
+      // default: () => {}
     }
   },
   components: {
     ForItem
   },
+  provide() {
+    return {
+      formProvide: this
+    }
+  },
+  created() {
+    // if (this.dataInfo) {
+    //   this.dataForm = this.dataInfo
+    // }
+  },
   data() {
     return {
-      dataForm: {},
-      fileList: []
+      dataForm: {
+        fileList: [],
+        files: [],
+        deleteFilesList: []
+      }
     }
   },
   methods: {
@@ -46,12 +63,18 @@ export default {
     resetFields() {
       this.$refs.formRef.resetFields()
     },
-    // setFileList
-    setFileList(fileList) {
+
+    // 外界获取以上传的文件列表
+    getFileList() {
+      return this.files
+    },
+    // 回显文件列表
+    setItemList(fileList) {
       this.fileList = fileList
     },
-    getFileList() {
-      return this.fileList
+    //
+    downloadFile(down) {
+      this.$emit('downloadFile', down)
     }
   },
   watch: {
@@ -60,6 +83,15 @@ export default {
         this.$emit('update:value', curr)
       },
       deep: true
+    },
+    dataInfo: {
+      handler(curr) {
+        if (curr) {
+          this.dataForm = this.dataInfo
+        }
+      },
+      deep: true,
+      immediate: true
     }
   }
 }
@@ -71,5 +103,9 @@ export default {
   ::v-deep .w100 {
     width: 100%;
   }
+}
+.flexable {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
