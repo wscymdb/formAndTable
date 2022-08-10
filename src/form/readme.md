@@ -124,14 +124,14 @@ formInfo: {
 
 ## type类型
 
-| 类型                        | 是否需要options                 | 描述                                  |
-| --------------------------- | ------------------------------- | ------------------------------------- |
-| text                        | 否                              | 文本框 <el-input>                     |
-| select                      | 是                              | 下拉框<el-select>                     |
-| date \| daterange\|dateTime | 否                              | 日期框<el-picker>                     |
-| upload                      | 否                              | 文件上传框（详情见upload）<el-upload> |
-| hidden                      | 否                              | 隐式的<el-input>                      |
-| download                    | 否 需要downloadLIst(详情见示例) | 提供下载的按钮                        |
+| 类型                        | 是否需要options                 | 描述                                   |
+| --------------------------- | ------------------------------- | -------------------------------------- |
+| text                        | 否                              | 文本框 \<el-input>                     |
+| select                      | 是                              | 下拉框\<el-select>                     |
+| date \| daterange\|dateTime | 否                              | 日期框\<el-picker>                     |
+| upload                      | 否                              | 文件上传框（详情见upload）\<el-upload> |
+| hidden                      | 否                              | 隐式的\<el-input>                      |
+| download                    | 否 需要downloadLIst(详情见示例) | 提供下载的按钮                         |
 
 ## upload
 
