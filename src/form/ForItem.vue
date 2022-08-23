@@ -12,6 +12,7 @@
         :placeholder="item.placeholder || '请输入'"
         :disabled="item.disabled"
         :readOnly="item.readOnly"
+        :clearable="item.clearable || true"
       ></el-input>
     </template>
     <template v-if="item.type === 'hidden'">
@@ -29,6 +30,7 @@
         v-on="$listeners"
         :disabled="item.disabled"
         :placeholder="item.placeholder"
+        :clearable="item.clearable || true"
       >
         <el-option
           v-for="(o, i) in item.options"
@@ -97,7 +99,7 @@
         >
         <div slot="tip" class="el-upload__tip" v-if="item.fileTypeList">
           只能上传{{
-            item.fileTypeList.join('--')
+            item.fileTypeList.join("--")
           }}类型文件，且不超过5MB,最多上传{{ item.limit }}个
         </div>
       </el-upload>
@@ -107,107 +109,107 @@
 
 <script>
 export default {
-  name: 'ForItem',
+  name: "ForItem",
   props: {
     item: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
-  inject: ['formProvide'],
+  inject: ["formProvide"],
   data() {
     return {
-      fileSize: 5 * 1024 * 1024 // 5MB
-    }
+      fileSize: 5 * 1024 * 1024, // 5MB
+    };
   },
   methods: {
     // 文件列表移除文件时的钩子
     handleRemove(file, fileList) {
-      console.log('===>', file)
-      let { status, name } = file
-      if (status === 'success') {
+      console.log("===>", file);
+      let { status, name } = file;
+      if (status === "success") {
         this.formProvide.dataForm.fileList =
           this.formProvide.dataForm.fileList.filter(
             (item) => item.name !== name
-          )
+          );
         !this.formProvide.dataForm.files &&
-          this.$set(this.formProvide.dataForm, 'files', [])
+          this.$set(this.formProvide.dataForm, "files", []);
         this.formProvide.dataForm.files =
-          this.formProvide.dataForm.files.filter((item) => item.name !== name)
+          this.formProvide.dataForm.files.filter((item) => item.name !== name);
       }
       // 删除的的数据
       !this.formProvide.dataForm.deleteFilesList &&
-        this.$set(this.formProvide.dataForm, 'deleteFilesList', [])
-      this.formProvide.dataForm.deleteFilesList.push(file)
+        this.$set(this.formProvide.dataForm, "deleteFilesList", []);
+      this.formProvide.dataForm.deleteFilesList.push(file);
     },
     // 文件上传前的钩子
     beforeUpload(file, fileTypeList) {
-      console.log('===>beforeUpload', file)
-      let name = file.name
+      console.log("===>beforeUpload", file);
+      let name = file.name;
       // 判断文件类型
-      let type = file.name.split('.')[1] || null
+      let type = file.name.split(".")[1] || null;
       if (fileTypeList.length && !fileTypeList.includes(type)) {
-        this.$message.info(`请上传${fileTypeList.toString()}类型的文件`)
-        return false
+        this.$message.info(`请上传${fileTypeList.toString()}类型的文件`);
+        return false;
       }
       // 判断文件大小
       if (file.size > this.fileSize) {
-        this.$message.info('文件大小需在5M以内')
-        return false
+        this.$message.info("文件大小需在5M以内");
+        return false;
       }
       // 判断是否重名
       let isOnly = this.formProvide.dataForm.fileList.some(
         (item) => name === item.name
-      )
+      );
 
       if (isOnly) {
-        this.$message.info(`请勿上传同名文件${name}`)
-        return false
+        this.$message.info(`请勿上传同名文件${name}`);
+        return false;
       }
     },
     // 文件上传的钩子
     uploadFile({ file }) {
-      let name = file.name
-      console.log(file)
+      let name = file.name;
+      console.log(file);
 
-      const url = this.getObjectURL(file)
+      const url = this.getObjectURL(file);
 
-      this.formProvide.dataForm.fileList.push({ name, url })
+      this.formProvide.dataForm.fileList.push({ name, url });
       !this.formProvide.dataForm.files &&
-        this.$set(this.formProvide.dataForm, 'files', [])
-      this.formProvide.dataForm.files.push(file)
+        this.$set(this.formProvide.dataForm, "files", []);
+      this.formProvide.dataForm.files.push(file);
     },
     // 获取文件流的地址
     getObjectURL(data) {
-      var url = null
+      var url = null;
       if (window.createObjectURL !== undefined) {
         // basic
-        url = window.createObjectURL(data)
+        url = window.createObjectURL(data);
       } else if (window.webkitURL !== undefined) {
         // webkit or chrome
         try {
-          url = window.webkitURL.createObjectURL(data)
+          url = window.webkitURL.createObjectURL(data);
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
       } else if (window.URL !== undefined) {
         // mozilla(firefox)
         try {
-          url = window.URL.createObjectURL(data)
+          url = window.URL.createObjectURL(data);
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
       }
-      return url
+      return url;
     },
     // 下载文件
     downloadFile(down) {
-      console.log('===>', down)
-      this.formProvide.downloadFile(down)
+      console.log("===>", down);
+      this.formProvide.downloadFile(down);
       // this.$emit('downloadFile', down)
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

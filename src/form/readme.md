@@ -104,7 +104,9 @@ formInfo: {
               trigger: 'change'
             }
           ]
-        }
+        },
+         inline: true,
+  		labelWidth: '120px'
       },
 ```
 
@@ -119,6 +121,7 @@ formInfo: {
 | prop        | 表单域 model 字段                            |
 | placeholder | 占位符文本                                   |
 | width       | 每个item的宽度，inline为ture时，此属性为必须 |
+| clearable   | 有x号的标识符，默认true                      |
 
 
 
