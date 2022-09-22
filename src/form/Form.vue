@@ -23,26 +23,27 @@
 </template>
 
 <script>
-import ForItem from './ForItem.vue'
+import { defaultFormat } from "moment";
+import ForItem from "./ForItem.vue";
 export default {
-  name: 'Form',
+  name: "Form",
   props: {
     formInfo: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     dataInfo: {
-      type: Object
+      type: Object,
       // default: () => {}
-    }
+    },
   },
   components: {
-    ForItem
+    ForItem,
   },
   provide() {
     return {
-      formProvide: this
-    }
+      formProvide: this,
+    };
   },
   created() {
     // if (this.dataInfo) {
@@ -54,52 +55,68 @@ export default {
       dataForm: {
         fileList: [],
         files: [],
-        deleteFilesList: []
-      }
-    }
+        deleteFilesList: [],
+      },
+    };
   },
   methods: {
     // 重置
     resetFields() {
-      this.$refs.formRef.resetFields()
+      let keys = Object.keys(this.dataForm);
+      keys.forEach((item, i, arr) => {
+        this.$set(this.dataForm, item, "");
+      });
+    },
+    validate(fn) {
+      this.$refs.formRef.validate((valid) => {
+        fn(valid);
+      });
     },
 
     // 外界获取以上传的文件列表
     getFileList() {
-      return this.files
+      return this.files;
     },
     // 回显文件列表
     setItemList(fileList) {
-      this.fileList = fileList
+      this.fileList = fileList;
     },
     //
     downloadFile(down) {
-      this.$emit('downloadFile', down)
-    }
+      this.$emit("downloadFile", down);
+    },
+    // 自定义label，icon的点击事件
+    labelIconClick(item) {
+      this.$emit("labelIconClick", item);
+    },
+    // cascader  change
+    cascaderChange(item) {
+      this.$emit("cascaderChange", item);
+    },
   },
   watch: {
     dataForm: {
       handler(curr) {
-        this.$emit('update:value', curr)
+        this.$emit("update:value", curr);
       },
-      deep: true
+      deep: true,
     },
     dataInfo: {
       handler(curr) {
         if (curr) {
-          this.dataForm = this.dataInfo
+          this.dataForm = this.dataInfo;
         }
       },
       deep: true,
-      immediate: true
-    }
-  }
-}
+      immediate: true,
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .blockable {
-  margin: 5px 0;
+  margin: 8px 0;
   ::v-deep .w100 {
     width: 100%;
   }

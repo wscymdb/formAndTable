@@ -114,14 +114,15 @@ formInfo: {
 
 ## 属性
 
-| 名称        | 描述                                         |
-| ----------- | -------------------------------------------- |
-| type        | item的类型，详情见``type类型``               |
-| label       | el-form-item的名称                           |
-| prop        | 表单域 model 字段                            |
-| placeholder | 占位符文本                                   |
-| width       | 每个item的宽度，inline为ture时，此属性为必须 |
-| clearable   | 有x号的标识符，默认true                      |
+| 名称        | 描述                                                         |
+| ----------- | ------------------------------------------------------------ |
+| type        | item的类型，详情见``type类型``                               |
+| label       | el-form-item的名称                                           |
+| prop        | 表单域 model 字段                                            |
+| placeholder | 占位符文本                                                   |
+| width       | 每个item的宽度，inline为ture时，此属性为必须                 |
+| clearable   | 有x号的标识符，默认true                                      |
+| format      | \<el-picker>的value-format值，具体看elementui官网https://element.eleme.cn/#/zh-CN/component/date-picker |
 
 
 
